@@ -1,0 +1,45 @@
+from flask import Flask, render_template_string
+
+app = Flask(__name__)
+
+# Exchange rate (1 THB = 130 MMK approx)
+EXCHANGE_RATE = 130  
+
+# Perfume data (can later move to database)
+perfumes = [
+    {"name": "De Blu Chanel", "size": "30ml", "price_thb": 450},
+    {"name": "Dior Sauvage", "size": "30ml", "price_thb": 400},
+    {"name": "Inspired Perfume Basic", "size": "30ml", "price_thb": 350}
+]
+
+# Simple HTML template inside Python (later we can use real HTML files)
+html_template = """
+<!doctype html>
+<html>
+<head>
+    <title>Perfume Shop</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background-color: #f5f5f5; }
+        .product { background: white; padding: 20px; margin: 10px; border-radius: 8px; }
+        h1 { color: #333; }
+    </style>
+</head>
+<body>
+    <h1>Inspire Perfume Shop</h1>
+    {% for perfume in perfumes %}
+        <div class="product">
+            <h2>{{ perfume.name }}</h2>
+            <p>Size: {{ perfume.size }}</p>
+            <p>Price: {{ perfume.price_thb }} THB / {{ perfume.price_thb * exchange_rate }} MMK</p>
+        </div>
+    {% endfor %}
+</body>
+</html>
+"""
+
+@app.route("/")
+def home():
+    return render_template_string(html_template, perfumes=perfumes, exchange_rate=EXCHANGE_RATE)
+
+if __name__ == "__main__":
+    app.run(debug=True)
